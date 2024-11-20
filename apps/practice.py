@@ -25,7 +25,7 @@ class PosePractice:
                 ideal_frame_path = self.fetch_ideal_pose()
                 ideal_frame = self.s3utils.fetch_image(ideal_frame_path)
                 if ideal_frame is not None:
-                    st.image(ideal_frame, channels='BGR', use_column_width=True)
+                    st.image(ideal_frame, channels='BGR', use_container_width=True)
                 st.info(USER_MSG)
 
             user_frame = None
@@ -35,7 +35,7 @@ class PosePractice:
                     compare = st.button('Compare Pose')
                     if compare: 
                         result_img = self.comparison.practice_pose(ideal_frame, user_frame)
-                        st.image(result_img, channels='BGR', use_column_width=True)
+                        st.image(result_img, channels='BGR', use_container_width=True)
         except:
             with col2:
                 st.error(UPLOAD_ISSUE)
@@ -47,7 +47,7 @@ class PosePractice:
             ideal_frame_path = self.fetch_ideal_pose()
             ideal_frame = self.s3utils.fetch_image(ideal_frame_path)
             if ideal_frame is not None:
-                st.image(ideal_frame, channels='BGR', use_column_width=True)
+                st.image(ideal_frame, channels='BGR', use_container_width=True)
             st.info(USER_MSG)
 
         if ideal_frame is not None:
@@ -69,7 +69,7 @@ class PosePractice:
 
                         frame = cv2.flip(frame, 1)
                         result_img = self.comparison.practice_pose(ideal_frame, frame)
-                        st_frame.image(result_img, channels='BGR', use_column_width=True)
+                        st_frame.image(result_img, channels='BGR', use_container_width=True)
 
                         if stop_camera:
                             self.cap.release()
