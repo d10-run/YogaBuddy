@@ -22,7 +22,7 @@ class PoseGuide:
         st.subheader(f"{pose['english_name']} ({pose['hindi_name']})")
         image = self.s3utils.fetch_image(pose['image'])
         if image is not None:
-            st.image(image, caption=pose['english_name'], use_column_width=True)
+            st.image(image, caption=pose['english_name'], use_container_width=True)
         st.write(pose['description'])
 
     def display_guide(self):
