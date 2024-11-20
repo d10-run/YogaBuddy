@@ -7,6 +7,7 @@ from constant import CLASSIFY_TITLE, UPLOAD_ISSUE, POSE_NOT_DETECTED_ISSUE, CAME
 
 class PoseClassifier:
     def __init__(self, model_path, pose_classes):
+        self.cap = None 
         self.classifier = Classifier(model_path, pose_classes)
 
     def classify_by_image(self):
@@ -26,25 +27,32 @@ class PoseClassifier:
             start_camera = st.button("Start Camera", key="start")
             stop_camera = st.button("Stop Camera", key="stop")
 
-            status = st.empty()
-            pose_placeholder = st.empty()
-            st_frame = st.empty()
-
             if start_camera and not stop_camera:
-                frame = st.camera_input("Capture your pose")
+                self.cap = cv2.VideoCapture(0)
+                status = st.empty()
+                pose_placeholder = st.empty()
+                st_frame = st.empty()
 
-                if frame:
-                    frame = cv2.imdecode(np.frombuffer(frame.read(), np.uint8), 1)
-                    frame = cv2.flip(frame, 1)  # Flip for mirror-like effect
-                    pose_name = self.classifier.classify_pose(frame)[0]
-                    status.write('Your current pose is:')
-                    pose_placeholder.success(pose_name)
+                while self.cap.isOpened():
+                    ret, frame = self.cap.read()
+                    if not ret:
+                        st.write(CAMERA_NOT_DETECTED_ISSUE)
+                        break
+
+                    frame = cv2.flip(frame, 1) 
+                    try:
+                        pose_name = self.classifier.classify_pose(frame)[0]
+                        status.write('Your current pose is:')
+                        pose_placeholder.success(pose_name)
+                    except:
+                        status.error(POSE_NOT_DETECTED_ISSUE)
+                        pose_placeholder.empty()
 
                     st_frame.image(frame, channels="BGR")
 
-            if stop_camera:
-                st_frame.empty()
-
+                    if stop_camera:
+                        self.cap.release()
+                        break
         except:
             st.error(CAMERA_ISSUE)
 
