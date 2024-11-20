@@ -35,13 +35,13 @@ class PoseClassifier:
 
                 if frame:
                     frame = cv2.imdecode(np.frombuffer(frame.read(), np.uint8), 1)
-                    frame = cv2.flip(frame, 1) 
+                    # frame = cv2.flip(frame, 1) 
                     try:
                         pose_name = self.classifier.classify_pose(frame)[0]
                         status.write('Your current pose is:')
                         pose_placeholder.success(pose_name)
-                    except Exception as e:
-                        status.error(f"{POSE_NOT_DETECTED_ISSUE}: {e}")
+                    except:
+                        status.error(POSE_NOT_DETECTED_ISSUE)
                         pose_placeholder.empty()
 
                     st_frame.image(frame, channels="BGR")
