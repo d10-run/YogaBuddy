@@ -28,17 +28,20 @@ class PoseClassifier:
             stop_camera = st.button("Stop Camera", key="stop")
 
             if start_camera and not stop_camera:
-                self.cap = cv2.VideoCapture(0)
+                # self.cap = cv2.VideoCapture(0)
                 status = st.empty()
                 pose_placeholder = st.empty()
                 st_frame = st.empty()
 
-                while self.cap.isOpened():
-                    ret, frame = self.cap.read()
-                    if not ret:
-                        st.write(CAMERA_NOT_DETECTED_ISSUE)
-                        break
-
+                # while self.cap.isOpened():
+                #     ret, frame = self.cap.read()
+                #     if not ret:
+                #         st.write(CAMERA_NOT_DETECTED_ISSUE)
+                #         break
+                
+                frame = st.camera_input("Take a picture")
+                if frame:
+                    frame = cv2.imdecode(np.frombuffer(frame.read(), np.uint8), 1)
                     frame = cv2.flip(frame, 1) 
                     try:
                         pose_name = self.classifier.classify_pose(frame)[0]
