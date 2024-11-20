@@ -35,21 +35,17 @@ class PoseClassifier:
 
                 if frame:
                     frame = cv2.imdecode(np.frombuffer(frame.read(), np.uint8), 1)
-                    # frame = cv2.flip(frame, 1) 
-                    try:
-                        pose_name = self.classifier.classify_pose(frame)[0]
-                        status.write('Your current pose is:')
-                        pose_placeholder.success(pose_name)
-                    except:
-                        status.error(POSE_NOT_DETECTED_ISSUE)
-                        pose_placeholder.empty()
+                    frame = cv2.flip(frame, 1)  # Flip for mirror-like effect
+                    pose_name = self.classifier.classify_pose(frame)[0]
+                    status.write('Your current pose is:')
+                    pose_placeholder.success(pose_name)
 
                     st_frame.image(frame, channels="BGR")
 
             if stop_camera:
                 st_frame.empty()
 
-        except Exception:
+        except:
             st.error(CAMERA_ISSUE)
 
     def display(self):
