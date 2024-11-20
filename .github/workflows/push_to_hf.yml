@@ -1,0 +1,21 @@
+
+name: Push to Hugging Face
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+jobs:
+  push-to-huggingface:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Run Hugging Push action
+        uses: backendcloud/hugging-push@v0.2.3
+        with:
+          huggingface_repo: 'd10-run/YogaBuddy-test'
+          hf_token: ${{ secrets.HF_TOKEN }}
+          repo_type: 'space'
+          space_sdk: 'streamlit'
+          private: false
